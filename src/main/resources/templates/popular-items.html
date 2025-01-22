@@ -1,0 +1,89 @@
+<!-- src/main/resources/templates/popular-items.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Популярные Товары</title>
+    <!-- Подключение CSS (Bootstrap для стилизации) -->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Включение навигационной панели -->
+<div th:replace="fragments :: navbar"></div>
+
+<!-- Header -->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Popular Product</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Our best selling products</p>
+        </div>
+    </div>
+</header>
+
+<!-- Section -->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <!-- Проверка наличия популярных товаров -->
+        <div th:if="${#lists.isEmpty(popularItems)}" class="alert alert-info" role="alert">
+            Нет популярных товаров для отображения.
+        </div>
+        <!-- Сетка популярных товаров -->
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" th:unless="${#lists.isEmpty(popularItems)}">
+            <!-- Карточки популярных товаров -->
+            <div class="col mb-5" th:each="item : ${popularItems}">
+                <div class="card h-100">
+                    <!-- Бейдж SALE -->
+                    <div th:if="${item[0].sale}" class="badge bg-success text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
+                        SALE
+                    </div>
+                    <!-- Изображение товара -->
+                    <img class="card-img-top img-fluid"
+                         th:src="${item[0].imageUrl != null and !#strings.isEmpty(item[0].imageUrl)} ? ${item[0].imageUrl} : 'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'"
+                         alt="Изображение Товара"
+                         style="width: 450px; height: 300px; object-fit: cover;" />
+                    <!-- Детали товара -->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Название товара -->
+                            <h5 class="fw-bolder" th:text="${item[0].name}">Название Товара</h5>
+
+                            <p class="card-text">
+                                <strong>Sold:</strong> <span th:text="${item[1]}">0</span>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Действия с товаром -->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <!-- Кнопка для просмотра деталей товара -->
+                            <a th:href="@{'/shop/product/' + ${item[0].id}}" class="btn btn-outline-dark mt-auto">Show</a>
+                            <!-- Добавление в корзину -->
+                            <form th:action="@{/cart/add/{id}(id=${item[0].id})}" method="post" style="display: inline;">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button type="submit" class="btn btn-outline-primary mt-auto">Add to cart </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Конец карточки товара -->
+        </div>
+        <!-- Конец сетки товаров -->
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">&copy; My WebSite 2024</p>
+    </div>
+</footer>
+
+<!-- Подключение JS (Bootstrap JS) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS -->
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

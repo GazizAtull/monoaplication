@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Confirmation</title>
+    <meta charset="UTF-8">
+    <style>
+        /* Add styles as needed */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h2>Hello, <span th:text="${order.user.userProfile.fullName}">User Name</span>!</h2>
+<p>Thank you for your order №<span th:text="${order.id}">12345</span>.</p>
+<p>Order Date: <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}">27.04.2024 12:00</span></p>
+<h3>Order Details:</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Product Name</th>
+        <th>Quantity</th>
+        <th>Unit Price</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${order.orderItems}">
+        <td th:text="${item.product.name}">Product Name</td>
+        <td th:text="${item.quantity}">1</td>
+        <td th:text="${#numbers.formatDecimal(item.price, 1, 'POINT', 2, 'NONE')} + ' $'">1000 $</td>
+        <td th:text="${#numbers.formatDecimal(item.price * item.quantity, 1, 'POINT', 2, 'NONE')} + ' $'">1000 $</td>
+    </tr>
+    </tbody>
+</table>
+<p>Total Amount: <span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 'POINT', 2, 'NONE')} + ' $'">1000 $</span></p>
+
+<p>We will contact you to confirm the delivery.</p>
+<p>Best regards,</p>
+<p>Gaziz Atullayev</p>
+</body>
+</html>

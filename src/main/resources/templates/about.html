@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="About Us Page" />
+  <meta name="author" content="" />
+  <title>About Us </title>
+  <!-- Favicon-->
+  <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+  <!-- Bootstrap icons-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Core theme CSS (includes Bootstrap)-->
+  <link th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container px-4 px-lg-5">
+    <a class="navbar-brand" href="/">Gaziz</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Основные ссылки навигации -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+        <li class="nav-item"><a class="nav-link" aria-current="page" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/about">About</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/">All Products</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="/shop/popularItem">Popular Items</a></li>
+            <li><a class="dropdown-item" href="/">New Arrivals</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- Кнопки и информация пользователя -->
+      <div class="d-flex align-items-center">
+        <!-- Для аутентифицированных пользователей -->
+        <div sec:authorize="isAuthenticated()" class="me-3 text-dark">
+          Welcome, <strong sec:authentication="name">User</strong>!
+        </div>
+        <div sec:authorize="isAuthenticated()" class="me-3">
+          <!-- Выпадающее меню -->
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              Menu
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="/profile">Profile</a></li>
+              <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" href="/admin/dashboard">Admin Dashboard</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <!-- Отдельная форма для Logout -->
+                <form th:action="@{/logout}" method="post" style="margin: 0;">
+                  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                  <button type="submit" class="dropdown-item">Logout</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Для неаутентифицированных пользователей -->
+        <div sec:authorize="!isAuthenticated()" class="me-2">
+          <a th:href="@{/login}" class="btn btn-outline-dark me-2" type="button">Log In</a>
+          <a th:href="@{/register}" class="btn btn-dark me-3" type="button">Register</a>
+        </div>
+        <!-- Кнопка корзины -->
+        <a th:href="@{/cart}" class="btn btn-outline-dark" type="button">
+          <i class="bi-cart-fill me-1"></i>
+          Cart
+          <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${totalQuantity}">0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Header-->
+
+<header class="bg-dark py-5 mb-5">
+  <div class="container px-4 px-lg-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">About Us</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Learn more about our company</p>
+    </div>
+  </div>
+</header>
+
+
+<!-- About Section-->
+<section class="py-5">
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5">
+      <!-- Изображение или другая визуальная часть -->
+      <div class="col-lg-6">
+        <img class="img-fluid rounded mb-4 mb-lg-0"
+             src="https://plus.unsplash.com/premium_photo-1661778490723-371305b4fb06?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YnVzaW5lc3MlMjB0ZWFtfGVufDB8fDB8fHww"
+             alt="About Image">
+      </div>
+      <!-- Текстовое описание -->
+      <div class="col-lg-6">
+        <h2>Our Story</h2>
+        <p>Our company was founded in 2024 (for project) with the aim of providing high-quality products and services to our customers. Since then, we have continuously grown and expanded our range, striving to meet the needs of the market.</p>
+        <p>We are proud of our team of professionals who work daily to ensure that our customers receive only the best. Our values are based on honesty, innovation, and the pursuit of excellence.</p>
+        <p>Thanks to our efforts, we have achieved numerous awards and industry recognitions, which confirm our commitment to quality and customer satisfaction.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+  <div class="container">
+    <p class="m-0 text-center text-white">&copy; Your Shop Name 2024</p>
+  </div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

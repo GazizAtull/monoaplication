@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Fragments</title>
+  <!-- Подключение необходимых стилей и скриптов -->
+  <link th:href="@{/css/styles.css}" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<!-- Определение фрагмента navbar -->
+<div th:fragment="navbar">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+      <a class="navbar-brand" href="/">Gaziz</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Основные ссылки навигации -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="/">All Products</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="/shop/popularItem">Popular Items</a></li>
+              <li><a class="dropdown-item" href="/">New Arrivals</a></li>
+            </ul>
+          </li>
+        </ul>
+        <!-- Кнопки и информация пользователя -->
+        <div class="d-flex align-items-center">
+          <!-- Для аутентифицированных пользователей -->
+          <div sec:authorize="isAuthenticated()" class="me-3 text-dark">
+            Welcome, <strong sec:authentication="name">User</strong>!
+          </div>
+          <div sec:authorize="isAuthenticated()" class="me-3">
+            <!-- Выпадающее меню -->
+            <div class="dropdown">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Menu
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" href="/admin/dashboard">Admin Dashboard</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <!-- Отдельная форма для Logout -->
+                  <form th:action="@{/logout}" method="post" style="margin: 0;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="dropdown-item">Logout</button>
+                  </form>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Для неаутентифицированных пользователей -->
+          <div sec:authorize="!isAuthenticated()" class="me-2">
+            <a th:href="@{/login}" class="btn btn-outline-dark me-2" type="button">Log In</a>
+            <a th:href="@{/register}" class="btn btn-dark me-3" type="button">Register</a>
+          </div>
+          <!-- Cart button -->
+          <a th:href="@{/cart}" class="btn btn-outline-dark" type="button">
+            <i class="bi-cart-fill me-1"></i>
+            Cart
+            <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${totalQuantity}">0</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+</body>
+</html>
